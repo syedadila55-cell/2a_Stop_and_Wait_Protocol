@@ -77,13 +77,8 @@ client_thread.join()
 '''
 ## OUTPUT:
 '''
-Connected with ('127.0.0.1', 59663)
-Server Message: Hello
-Server: Hello
-Client: Acknowledgement Received from client
-Server Message: How are you
-Server: How are you
-Client: Acknowledgement Received from client
+<img width="418" height="157" alt="Screenshot 2026-05-13 161410" src="https://github.com/user-attachments/assets/07cfd1c5-ca31-446e-9dec-a2f39a9da149" />
+
 '''
 ## RESULT
 Thus, python program to perform stop and wait protocol was successfully executed.
