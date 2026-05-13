@@ -9,35 +9,81 @@ To write a python program to perform stop and wait protocol
 5. If your frames reach the server it will send ACK signal to client
 6. Stop the Program
 ## PROGRAM:
-## CLIENT
-  '''
-  import socket
-s=socket.socket()
-s.bind(('localhost', 8001))
-s.listen(5)
-c,addr=s.accept()
-while True:
-    i=input("Enter a data: ")
-    c.send(i.encode())
-    ack=c.recv(1024).decode()
-    if ack:
-        print(ack)
-        continue
-    else:
-        c.close()
-        break
 '''
-## SERVER
 import socket
-s=socket.socket()
-s.connect(('localhost', 8001))
-while True:
-    print(s.recv(1024).decode())
-    s.send("Acknowledgement Recived frome the server".encode())
-    '''
+import threading
+
+# ---------------- SERVER ----------------
+def server_program():
+    server = socket.socket()
+    server.bind(('localhost', 8001))
+    server.listen(1)
+
+    print("Server is waiting for connection...")
+
+    conn, addr = server.accept()
+    print(f"Connected with {addr}")
+
+    while True:
+        msg = input("Server Message: ")
+
+        if msg.lower() == 'exit':
+            conn.send("Server closed connection".encode())
+            break
+
+        conn.send(msg.encode())
+
+        ack = conn.recv(1024).decode()
+
+        if ack:
+            print("Client:", ack)
+        else:
+            break
+
+    conn.close()
+    server.close()
+
+
+# ---------------- CLIENT ----------------
+def client_program():
+    client = socket.socket()
+    client.connect(('localhost', 8001))
+
+    while True:
+        data = client.recv(1024).decode()
+
+        if not data:
+            break
+
+        print("Server:", data)
+
+        if data.lower() == "server closed connection":
+            break
+
+        client.send("Acknowledgement Received from client".encode())
+
+    client.close()
+
+
+# ---------------- MAIN ----------------
+server_thread = threading.Thread(target=server_program)
+client_thread = threading.Thread(target=client_program)
+
+server_thread.start()
+client_thread.start()
+
+server_thread.join()
+client_thread.join()
+'''
 ## OUTPUT:
 '''
-<img width="950" height="287" alt="Screenshot 2026-05-13 160752" src="https://github.com/user-attachments/assets/fd96abe9-5971-4e8f-bcba-e60f108ca999" />
+Connected with ('127.0.0.1', 59663)
+Server Message: Hello
+Server: Hello
+Client: Acknowledgement Received from client
+Server Message: How are you
+Server: How are you
+Client: Acknowledgement Received from client
 '''
 ## RESULT
 Thus, python program to perform stop and wait protocol was successfully executed.
