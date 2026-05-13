@@ -28,7 +28,6 @@ while True:
         break
 '''
 ## SERVER
-'''
 import socket
 s=socket.socket()
 s.connect(('localhost', 8001))
